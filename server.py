@@ -11,6 +11,12 @@ import calculations
 This is a simple Battlesnake server written in Python.
 For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
 """
+xSize = 0
+ySize = 0
+boardData = [[]]
+xHead = 0
+yHead = 0
+Food = []
 
 
 class Battlesnake(object):
@@ -51,7 +57,6 @@ class Battlesnake(object):
         global yHead
         global head
         global Food
-        Food = []
             
 
         #----------------------
@@ -117,24 +122,27 @@ class Battlesnake(object):
         for action in moves:
             if action == 'left':
                 if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
-                    print(colored("Illegal move: LEFT removed","red"))
+                    #print(colored("Illegal move: LEFT removed","red"))
                     moves.remove('left')
             elif action == 'right':
                 if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
-                    print(colored("Illegal move: RIGHT removed","red"))
+                    #print(colored("Illegal move: RIGHT removed","red"))
                     moves.remove('right')
             elif action == 'up':
                 if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
-                    print(colored("Illegal move: UP removed","red"))
+                    #print(colored("Illegal move: UP removed","red"))
                     moves.remove('up')
             elif action == 'down':
                 if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
-                    print(colored("Illegal move: DOWN removed","red"))
+                    #print(colored("Illegal move: DOWN removed","red"))
                     moves.remove('down')
 
 
-
-        return {"move": moves[0]}
+        if moves:
+            return {"move": moves[0]}
+        if not moves:
+            print("BIMBO")
+            return list({"move:" "left"})
 
 
     @cherrypy.expose
