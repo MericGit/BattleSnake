@@ -12,6 +12,7 @@ def distanceSort(posX,posY,fruitArray):
     print(colored(distances,"yellow"))
     output = [fruitArray for _, fruitArray in sorted(zip(distances, fruitArray))]
     print(output)
+    #.
     return output
 
 
