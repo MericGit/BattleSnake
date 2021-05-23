@@ -1,7 +1,7 @@
 import collections
 from termcolor import colored
 def distanceSort(posX,posY,fruitArray):
-    print(colored("DISTANCE SORT DEBUG:","cyan"))
+    #print(colored("DISTANCE SORT DEBUG:","cyan"))
     
     distances = []
     for x in fruitArray:

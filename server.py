@@ -81,7 +81,7 @@ class Battlesnake(object):
                 boardData[xSize - 1 - y['y']][y['x']] = 1
             boardData[xSize - 1 - head['y']][head['x']] = 1
             
-        print("-----------\nSTATE UPDATED:")
+        #print("-----------\nSTATE UPDATED:")
         #print(numpy.matrix(boardData))
         #print("-----------")
         #---------------------
