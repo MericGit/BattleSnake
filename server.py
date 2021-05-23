@@ -40,7 +40,7 @@ class Battlesnake(object):
         ySize = data['board']['width']
         global boardData
         boardData = [ [0] * xSize for _ in range(ySize)]
-        print(numpy.matrix(boardData))
+        #print(numpy.matrix(boardData))
         return "ok"
 
     @cherrypy.expose
@@ -61,10 +61,10 @@ class Battlesnake(object):
         snakeList = data['board']['snakes']
         xHead = data['you']['head']['x']
         yHead = xSize - 1 - data['you']['head']['y']
-        print("xHead is")
-        print(xHead)
-        print("yHead is")
-        print(yHead)
+        #print("xHead is")
+        #print(xHead)
+        #print("yHead is")
+        #print(yHead)
         for i in data['board']['food']:
             boardData[xSize - 1 - i['y']][i['x']] = 0
             Food.append((xSize - 1 - i['y'],i['x']))
@@ -82,20 +82,20 @@ class Battlesnake(object):
             boardData[xSize - 1 - head['y']][head['x']] = 1
             
         print("-----------\nSTATE UPDATED:")
-        print(numpy.matrix(boardData))
-        print("-----------")
+        #print(numpy.matrix(boardData))
+        #print("-----------")
         #---------------------
 
 
         # Choose a random direction to move in
         path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
-        print(colored("Path is: ","cyan"))
-        print(colored(path,'yellow'))
-        print("head: " + str(xHead) + " " + str(yHead))
-        print(colored("TARGET MOVE:","cyan"))
-        print(path[1])
+        #print(colored("Path is: ","cyan"))
+        #print(colored(path,'yellow'))
+        #print("head: " + str(xHead) + " " + str(yHead))
+        #print(colored("TARGET MOVE:","cyan"))
+        #print(path[1])
         moves = []
-        print(colored("MOVES LIST: ","cyan"))
+        #print(colored("MOVES LIST: ","cyan"))
         target = path[1]
         if target[1] > xHead:
             print(colored("right","yellow"))
