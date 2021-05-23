@@ -47,7 +47,8 @@ class Battlesnake(object):
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
     def move(self):
-            
+        data = cherrypy.request.json
+        Food = []
         xSize = data['board']['height']
         ySize = data['board']['width']
         #----------------------
@@ -105,9 +106,6 @@ class Battlesnake(object):
         if target[0] < yHead:
             print(colored("up","yellow"))
             moves.append('up')
-
-
-
 
 
         for action in moves:
