@@ -72,9 +72,7 @@ class Battlesnake(object):
         for x in snakeList:
             body = x['body']
             head = x['head']
-
-            
-            for y in body:
+            for y in body[:-1]:
                 boardData[xSize - 1 - y['y']][y['x']] = 1
             boardData[xSize - 1 - head['y']][head['x']] = 1
             
@@ -132,8 +130,8 @@ class Battlesnake(object):
         if not moves:
             print("BIMBO")
             return list({"move:" "left"})
-
-
+        print("BIMBO")
+        return list({"move:" "left"})
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def end(self):
