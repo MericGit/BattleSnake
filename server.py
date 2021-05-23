@@ -11,11 +11,11 @@ import calculations
 This is a simple Battlesnake server written in Python.
 For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
 """
-xSize = 0
-ySize = 0
-boardData = [[]]
-xHead = 0
-yHead = 0
+xSize = None
+ySize = None
+boardData = None
+xHead = None
+yHead = None
 Food = []
 
 
