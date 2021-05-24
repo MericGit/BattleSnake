@@ -84,9 +84,11 @@ class Battlesnake(object):
 
         # Choose a random direction to move in
         if data['you']['health'] > 40:
-                print("not too hungry so going for further food pog")
-                path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[-1])
-        path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
+            print("not too hungry so going for further food pog")
+            path = pathfind.astar(boardData, (yHead,xHead), (calculations.distanceSort(xHead,yHead,Food)[-1]))
+        else:
+            print("am hungry")
+            path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         #print(colored("Path is: ","cyan"))
         #print(colored(path,'yellow'))
         #print("head: " + str(xHead) + " " + str(yHead))
