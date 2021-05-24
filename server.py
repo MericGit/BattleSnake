@@ -69,12 +69,24 @@ class Battlesnake(object):
 
 
 
-
+        tuples = []
         for x in snakeList:
             body = x['body']
         #    head = x['head']
             for y in body[:-1]:
                 boardData[xSize - 1 - y['y']][y['x']] = 1
+        for x in snakeList[1: ]:
+            head = x['head']
+            tuples.append(ySize - 1 - head['y'] - 1,head['x']) # 1 above
+            tuples.append(ySize - 1 - head['y'] + 1,head['x']) # below
+            tuples.append(ySize - 1 - head['y'],head['x'] - 1) # left
+            tuples.append(ySize - 1 - head['y'],head['x'] + 1) # right
+
+        sH = calculations.path2head(xHead,yHead,tuples)
+        boardData[xSize - 1 - sH[0][0]][sh[0][1]] = 1
+
+
+
 #            boardData[xSize - 1 - head['y']][head['x']] = 1
             
         #print("-----------\nSTATE UPDATED:")

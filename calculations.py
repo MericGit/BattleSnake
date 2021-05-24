@@ -18,3 +18,14 @@ def distanceSort(posX,posY,fruitArray):
 
 
 
+def simpleDist(tuple1,tuple2):
+   distance = abs(tuple1[0] - tuple2[1]) + abs(tuple1[1] - tuple2[1])
+   return distance
+
+def path2head(headX,headY,tuples):
+   distances = []
+   for x in tuples:
+      temp = simpleDist((headY,headX),x)
+      distances.append(temp)
+   output = [tuples for _, tuples in sorted(zip(distances, tuples))]
+   return output
