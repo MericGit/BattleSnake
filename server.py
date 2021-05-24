@@ -92,7 +92,7 @@ class Battlesnake(object):
 
         if data['you']['health'] > 40 and size > 5:
             print("not too hungry so going just gonna try and survive")
-            path = pathfind.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['x'],data['you']['body'][-1]['x']))
+            path = pathfind.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
             print("am hungry")
             path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
@@ -147,11 +147,6 @@ class Battlesnake(object):
             print("Target: ")
             print(moves[0])
             return {"move": moves[0]}
-        if not moves:
-            print("BIMBO")
-            return list({"move:" "left"})
-        print("BIMBO")
-        return list({"move:" "left"})
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def end(self):
