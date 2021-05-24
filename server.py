@@ -57,7 +57,7 @@ class Battlesnake(object):
         data = cherrypy.request.json
         snakeList = data['board']['snakes']
         xHead = data['you']['head']['x']
-        yHead = xSize - 1 - data['you']['head']['y']
+        yHead = ySize - 1 - data['you']['head']['y']
         #print("xHead is")
         #print(xHead)
         #print("yHead is")
@@ -74,27 +74,34 @@ class Battlesnake(object):
             head = x['head']
             for y in body[:-1]:
                 boardData[xSize - 1 - y['y']][y['x']] = 1
-            boardData[xSize - 1 - head['y']][head['x']] = 1
+#            boardData[xSize - 1 - head['y']][head['x']] = 1
             
         #print("-----------\nSTATE UPDATED:")
         #print(numpy.matrix(boardData))
         #print("-----------")
         #---------------------
 
+        size = len(data['you']['body'])
+        print("Size is: ")
+        print(size)
+        # Choose a random direction to move in.
 
-        # Choose a random direction to move in
-        if data['you']['health'] > 40:
-            print("not too hungry so going for further food pog")
-            path = pathfind.astar(boardData, (yHead,xHead), (calculations.distanceSort(xHead,yHead,Food)[-1]))
+
+
+
+
+        if data['you']['health'] > 40 and size > 5:
+            print("not too hungry so going just gonna try and survive")
+            path = pathfind.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['x'],data['you']['body'][-1]['x']))
         else:
             print("am hungry")
             path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
+        moves = []
         #print(colored("Path is: ","cyan"))
         #print(colored(path,'yellow'))
         #print("head: " + str(xHead) + " " + str(yHead))
         #print(colored("TARGET MOVE:","cyan"))
         #print(path[1])
-        moves = []
         #print(colored("MOVES LIST: ","cyan"))
         target = path[1]
         if target[1] > xHead:
@@ -110,27 +117,35 @@ class Battlesnake(object):
             print(colored("up","yellow"))
             moves.append('up')
 
+        #print("Move removals: ")
+        #print(xHead)
+        #print(yHead)
 
-        for action in moves:
-            if action == 'left':
-                if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
-                    #print(colored("Illegal move: LEFT removed","red"))
-                    moves.remove('left')
-            elif action == 'right':
-                if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
-                    #print(colored("Illegal move: RIGHT removed","red"))
-                    moves.remove('right')
-            elif action == 'up':
-                if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
-                    #print(colored("Illegal move: UP removed","red"))
-                    moves.remove('up')
-            elif action == 'down':
-                if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
-                    #print(colored("Illegal move: DOWN removed","red"))
-                    moves.remove('down')
+        if 'left' in moves:
+            if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1):
+            #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
+                print(colored("Illegal move: LEFT removed","red"))
+                moves.remove('left')
+        if 'right' in moves:
+            if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1:
+            #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
+                print(colored("Illegal move: RIGHT removed","red"))
+                moves.remove('right')
+        if 'up' in moves:
+            if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1:
+            #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
+                print(colored("Illegal move: UP removed","red"))
+                moves.remove('up')
+        if 'down' in moves:
+            if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1:
+            #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
+                print(colored("Illegal move: DOWN removed","red"))
+                moves.remove('down')
 
-
+        print(moves)
         if moves:
+            print("Target: ")
+            print(moves[0])
             return {"move": moves[0]}
         if not moves:
             print("BIMBO")
