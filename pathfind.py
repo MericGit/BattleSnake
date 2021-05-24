@@ -14,6 +14,12 @@ class Node():
         return self.position == other.position
 
 
+def clumpastar(maze,start,end):
+    for x in end:
+        astar(maze,start,x)
+
+
+
 def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 

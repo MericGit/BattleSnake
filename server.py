@@ -6,12 +6,13 @@ import cherrypy
 from termcolor import colored
 import pathfind
 import calculations
+import pathfind2
 
 """
 This is a simple Battlesnake server written in Python.
 For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
 """
-
+turn = 0
 
 
 class Battlesnake(object):
@@ -39,7 +40,7 @@ class Battlesnake(object):
         xSize = data['board']['height']
         ySize = data['board']['width']
 
-        boardData = [ [0] * xSize for _ in range(ySize)]
+    #    boardData = [ [0] * xSize for _ in range(ySize)]
         #print(numpy.matrix(boardData))
         return "ok"
 
@@ -47,6 +48,8 @@ class Battlesnake(object):
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
     def move(self):
+        global turn
+        turn+=1
         data = cherrypy.request.json
         Food = []
         xSize = data['board']['height']
@@ -54,7 +57,6 @@ class Battlesnake(object):
         #----------------------
         #Board Generation Data
         boardData = [ [0] * xSize for _ in range(ySize)]
-        data = cherrypy.request.json
         snakeList = data['board']['snakes']
         xHead = data['you']['head']['x']
         yHead = ySize - 1 - data['you']['head']['y']
@@ -63,7 +65,6 @@ class Battlesnake(object):
         #print("yHead is")
         #print(yHead)
         for i in data['board']['food']:
-            boardData[xSize - 1 - i['y']][i['x']] = 0
             Food.append((xSize - 1 - i['y'],i['x']))
 
 
@@ -71,7 +72,7 @@ class Battlesnake(object):
 
         for x in snakeList:
             body = x['body']
-            head = x['head']
+        #    head = x['head']
             for y in body[:-1]:
                 boardData[xSize - 1 - y['y']][y['x']] = 1
 #            boardData[xSize - 1 - head['y']][head['x']] = 1
@@ -82,8 +83,8 @@ class Battlesnake(object):
         #---------------------
 
         size = len(data['you']['body'])
-        print("Size is: ")
-        print(size)
+        #print("Size is: ")
+        #print(size)
         # Choose a random direction to move in.
 
 
@@ -91,11 +92,11 @@ class Battlesnake(object):
 
 
         if data['you']['health'] > 40 and size > 5:
-            print("not too hungry so going just gonna try and survive")
-            path = pathfind.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
+            #print("not too hungry so going just gonna try and survive")
+            path = pathfind2.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
-            print("am hungry")
-            path = pathfind.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
+            #print("am hungry")
+            path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         moves = []
         #print(colored("Path is: ","cyan"))
         #print(colored(path,'yellow'))
@@ -103,50 +104,68 @@ class Battlesnake(object):
         #print(colored("TARGET MOVE:","cyan"))
         #print(path[1])
         #print(colored("MOVES LIST: ","cyan"))
-        target = path[1]
-        if target[1] > xHead:
-            print(colored("right","yellow"))
-            moves.append('right')
-        if target[1] < xHead:
-            print(colored("left","yellow"))
-            moves.append('left')
-        if target[0] > yHead:
-            print(colored("down","yellow"))
-            moves.append('down')
-        if target[0] < yHead:
-            print(colored("up","yellow"))
-            moves.append('up')
+        if len(path) >= 2:
+            target = path[1]
+            if target[1] > xHead:
+                #print(colored("right","yellow"))
+                moves.append('right')
+            if target[1] < xHead:
+                #print(colored("left","yellow"))
+                moves.append('left')
+            if target[0] > yHead:
+                #print(colored("down","yellow"))
+                moves.append('down')
+            if target[0] < yHead:
+                #print(colored("up","yellow"))
+                moves.append('up')
+        else:
+            moves = ['left','right','down','up']
 
         #print("Move removals: ")
         #print(xHead)
         #print(yHead)
-
-        if 'left' in moves:
-            if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1):
-            #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
-                print(colored("Illegal move: LEFT removed","red"))
-                moves.remove('left')
-        if 'right' in moves:
-            if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1:
-            #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
-                print(colored("Illegal move: RIGHT removed","red"))
-                moves.remove('right')
-        if 'up' in moves:
-            if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1:
-            #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
-                print(colored("Illegal move: UP removed","red"))
-                moves.remove('up')
-        if 'down' in moves:
-            if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1:
-            #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
-                print(colored("Illegal move: DOWN removed","red"))
-                moves.remove('down')
-
-        print(moves)
         if moves:
-            print("Target: ")
-            print(moves[0])
+            moves = moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
+
+        #print(moves)
+        if moves:
+            print("Turn count: " + str(turn))
+            print("Path is: " + str(path))
+            print("Possible moves are: " + str(moves))
+            print("Target: " + str(moves[0]))
             return {"move": moves[0]}
+        else:
+            print("ERROR: - PATHFIND RETURN NULL -")
+            print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
+
+        
+
+        
+
+def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
+    if 'left' in moves:
+        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1):
+        #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
+            print(colored("Illegal move: LEFT removed","red"))
+            moves.remove('left')
+    if 'right' in moves:
+        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1:
+        #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
+            print(colored("Illegal move: RIGHT removed","red"))
+            moves.remove('right')
+    if 'up' in moves:
+        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1:
+        #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
+            print(colored("Illegal move: UP removed","red"))
+            moves.remove('up')
+    if 'down' in moves:
+        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1:
+        #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
+            print(colored("Illegal move: DOWN removed","red"))
+            moves.remove('down')
+    return moves
+
+
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def end(self):
@@ -159,6 +178,8 @@ class Battlesnake(object):
 
 
 if __name__ == "__main__":
+
+
     server = Battlesnake()
     cherrypy.config.update({"server.socket_host": "0.0.0.0"})
     cherrypy.config.update(
