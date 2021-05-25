@@ -76,18 +76,26 @@ class Battlesnake(object):
         #    head = x['head']
             for y in body[:-1]:
                 boardData[ySize - 1 - y['y']][y['x']] = 1
-        for x in snakeList[1: ]:
+        for x in snakeList:
             head = x['head']
-            tuples.append((ySize - 1 - head['y'] - 1,head['x'])) # 1 above
-            tuples.append((ySize - 1 - head['y'] + 1,head['x'])) # below
-            tuples.append((ySize - 1 - head['y'],head['x'] - 1)) # left
-            tuples.append((ySize - 1 - head['y'],head['x'] + 1)) # right
+            if x['name'] != 'SnakeySnake':
+                tuples.append((ySize - 1 - head['y'] - 1,head['x'])) # 1 above
+                tuples.append((ySize - 1 - head['y'] + 1,head['x'])) # below
+                tuples.append((ySize - 1 - head['y'],head['x'] - 1)) # left
+                tuples.append((ySize - 1 - head['y'],head['x'] + 1)) # right
 
         sH = calculations.path2head(xHead,yHead,tuples)
         if len(sH) > 1:
             print("SH IS: ")
             print(sH)
-            boardData[ySize - 1 - sH[0][0]][sH[0][1]] = 1
+            print("ENEMY HEAD LOC: ")
+            print(sH[0][0])
+            print(sH[0][1])
+            print(sH[1][0])
+            print(sH[1][1])
+            boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
+            boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
+
 
 
 
@@ -171,7 +179,7 @@ class Battlesnake(object):
         #print(xHead)
         #print(yHead)
         if moves:
-            moves = moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
+            moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
 
 
 
@@ -188,6 +196,7 @@ class Battlesnake(object):
   
         print("ERROR: - PATHFIND RETURN NULL -")
         print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
+            
 
         
 
@@ -224,6 +233,8 @@ def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
         # It's purely for informational purposes, you don't have to make any decisions here.
     #    data = cherrypy.request.json
     #    print(data)
+        print("                  ")
+        print("                   ")
         print("END")
         turn = 0
         return "ok"
