@@ -100,7 +100,17 @@ class Battlesnake(object):
 
 
 
-        # pure witchcraft aka it's full of nonsense lmao what have I written 
+        # ----------------------------------------------
+        #
+        # FIGHT OR FLIGHT MODULE
+        # Determines if the snake should avoid the closet enemy head, 
+        # or aim towards it to kill it.
+        # Code is messy as path2head is broken
+        # TODO: FIX path2head
+        #
+        #-------------------------------------------------
+
+
         sH = calculations.path2head(yHead,xHead,tuples)
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             print("SH IS: ")
@@ -201,7 +211,7 @@ class Battlesnake(object):
         if moves:
             moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
         
-        else:
+        if not moves:
             print("ERROR: - PATHFIND RETURN WRONG SOLUTION -")
             print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
             moves = ['left','right','down','up']            
