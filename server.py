@@ -4,7 +4,6 @@ import json
 import numpy
 import cherrypy
 from termcolor import colored
-import pathfind
 import calculations
 import pathfind2
 import floodfill
@@ -26,9 +25,9 @@ class Battlesnake(object):
         return {
             "apiversion": "1",
             "author": "Lawrence Zhang",
-            "color": "#00FF74",
-            "head": "evil", 
-            "tail": "curled",  
+            "color": "#5E8773",
+            "head": "tiger-king", 
+            "tail": "hook",  
         }
     
     @cherrypy.expose
@@ -86,7 +85,7 @@ class Battlesnake(object):
                 boardData[ySize - 1 - y['y']][y['x']] = 1
         for x in snakeList:
             head = x['head']
-            if x['name'] != 'SnakeySnake':
+            if x['name'] != 'Danger Noodle - A*/Flood':
                 tuples.append((ySize - 1 - head['y'] - 1,head['x'])) # 1 above
                 tuples.append((ySize - 1 - head['y'] + 1,head['x'])) # below
                 tuples.append((ySize - 1 - head['y'],head['x'] - 1)) # left
@@ -120,19 +119,19 @@ class Battlesnake(object):
             print(sH)
             print("ENEMY HEAD LOC: ")
             hunt = False
-            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
+            if sH[0][0] < ySize and sH[0][0] - 1 > -1 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
-            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
+            if sH[1][0] < ySize and sH[1][0] - 1 > -1 and sH[1][1]  > -1 and sH[1][1] < xSize:
                 print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
                 boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
-            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
+            if sH[2][0] < ySize and sH[2][0] - 1 > -1 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
-            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+            if sH[3][0] < ySize and sH[3][0] - 1 > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
-        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 3:
+        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 2:
             hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added TARGET at " + str(sH[0][0]) + str(sH[0][1]))
@@ -162,14 +161,14 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 30 and hunt == True and data['you']['length'] > 4:
-            #print("not too hungry so going just gonna try and survive")
+        if data['you']['health'] > 30 and hunt is True and data['you']['length'] > 4:
+            print("Aggressive Hunting")
             path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         elif data['you']['health'] > 40 and data['you']['length'] > 6:
-            #print("not too hungry so going just gonna try and survive")
+            print("Survive")
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
-            #print("am hungry")
+            print("Seek food")
             path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         moves = []
 
