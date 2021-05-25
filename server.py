@@ -7,6 +7,7 @@ from termcolor import colored
 import pathfind
 import calculations
 import pathfind2
+import floodfill
 
 """
 This is a simple Battlesnake server written in Python.
@@ -84,8 +85,14 @@ class Battlesnake(object):
                 tuples.append((ySize - 1 - head['y'],head['x'] - 1)) # left
                 tuples.append((ySize - 1 - head['y'],head['x'] + 1)) # right
 
+
+            closestSnake = calculations.getClosestSnake(ySize,xHead,yHead,snakeList)
+
+
+
+
         sH = calculations.path2head(xHead,yHead,tuples)
-        if len(sH) > 1:
+        if len(sH) > 1 and closestSnake['length'] > data['you']['length']:
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
@@ -173,6 +180,8 @@ class Battlesnake(object):
                 #print(colored("up","yellow"))
                 moves.append('up')
         else:
+            print("ERROR: - PATHFIND RETURN NULL -")
+            print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
             moves = ['left','right','down','up']
 
         #print("Move removals: ")
@@ -194,8 +203,7 @@ class Battlesnake(object):
             print("Target: " + str(moves[0]))
             return {"move": moves[0]}
   
-        print("ERROR: - PATHFIND RETURN NULL -")
-        print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
+
             
 
         

@@ -30,3 +30,12 @@ def path2head(headX,headY,tuples):
       distances.append(temp)
    output = [tuples for _, tuples in sorted(zip(distances, tuples))]
    return output
+
+def getClosestSnake(ySize,headX,headY,snakeList):
+   distances = []
+   for x in snakeList:
+      temp = simpleDist((headY,headX),(ySize - 1 -  x['body']['head']['y'], x['body']['head']['x']))
+      distances.append(temp)
+   output = [snakeList for _, snakeList in sorted(zip(distances, snakeList))]
+   return output[0]
+
