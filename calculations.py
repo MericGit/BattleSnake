@@ -45,8 +45,8 @@ def getClosestSnake(ySize,headX,headY,snakeList):
       if x > maxNum:
          result = index
       index+=1
-      print("CLOSEST SNAKE: ")
-      print(snakeList[result])
+   print("CLOSEST SNAKE: ")
+   print(snakeList[result])
    return snakeList[result]
 
 
