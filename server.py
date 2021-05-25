@@ -15,8 +15,7 @@ For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python
 """
 turn = 0
 hunt = False
-y = 0
-x = 0
+
 class Battlesnake(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -31,26 +30,18 @@ class Battlesnake(object):
             "head": "evil", 
             "tail": "curled",  
         }
-def getBoardSize():
-    return (y,x)
     
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def start(self):
         global turn
         turn = 0
-        global y
-
-        global x
-
         # This function is called everytime your snake is entered into a game.
         # cherrypy.request.json contains information about the game that's about to be played.
         data = cherrypy.request.json
 
         xSize = data['board']['height']
         ySize = data['board']['width']
-        x = xSize
-        y= ySize
 
     #    boardData = [ [0] * xSize for _ in range(ySize)]
         #print(numpy.matrix(boardData))
@@ -141,7 +132,7 @@ def getBoardSize():
             if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
-        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 2:
+        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 3:
             hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added TARGET at " + str(sH[0][0]) + str(sH[0][1]))
