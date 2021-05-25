@@ -13,6 +13,7 @@ def distanceSort(posX,posY,fruitArray):
     output = [fruitArray for _, fruitArray in sorted(zip(distances, fruitArray))]
     #print(output)
     #.
+    print("Fruit sort complete")
     return output
 
 

@@ -49,6 +49,7 @@ class Battlesnake(object):
     @cherrypy.tools.json_out()
     def move(self):
         global turn
+        print("Turn count is: " + str(turn))
         turn+=1
         data = cherrypy.request.json
         Food = []
@@ -74,7 +75,7 @@ class Battlesnake(object):
             body = x['body']
         #    head = x['head']
             for y in body[:-1]:
-                boardData[xSize - 1 - y['y']][y['x']] = 1
+                boardData[ySize - 1 - y['y']][y['x']] = 1
         for x in snakeList[1: ]:
             head = x['head']
             tuples.append((ySize - 1 - head['y'] - 1,head['x'])) # 1 above
@@ -84,7 +85,9 @@ class Battlesnake(object):
 
         sH = calculations.path2head(xHead,yHead,tuples)
         if len(sH) > 1:
-            boardData[ySize - 1 - sH[0][0]][sh[0][1]] = 1
+            print("SH IS: ")
+            print(sH)
+            boardData[ySize - 1 - sH[0][0]][sH[0][1]] = 1
 
 
 
@@ -103,21 +106,51 @@ class Battlesnake(object):
 
 
 
-
+        path = []
         if data['you']['health'] > 40 and size > 5:
             #print("not too hungry so going just gonna try and survive")
-            path = pathfind2.astar(boardData, (yHead,xHead),(data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
+            path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
             #print("am hungry")
             path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         moves = []
+
+        if path:
+            for step in path:
+                boardData[step[0]][step[1]] = 2
+
+            for row in boardData:
+                line = []
+                for col in row:
+                    if col == 1:
+                        line.append(colored("□","green"))
+                    elif col == 0:
+                        line.append(colored("□","white"))
+                    elif col == 2:
+                        line.append(colored("□","red"))
+                print("".join(line))
+
+            print(path)
+        else:
+            print(boardData)
+
+        
+
+
+
+
+
+
+
+
+
         #print(colored("Path is: ","cyan"))
         #print(colored(path,'yellow'))
         #print("head: " + str(xHead) + " " + str(yHead))
         #print(colored("TARGET MOVE:","cyan"))
         #print(path[1])
         #print(colored("MOVES LIST: ","cyan"))
-        if len(path) >= 2:
+        if path is not None:
             target = path[1]
             if target[1] > xHead:
                 #print(colored("right","yellow"))
@@ -140,20 +173,25 @@ class Battlesnake(object):
         if moves:
             moves = moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
 
-        #print(moves)
+
+
+
+
+
+        #print(moves).
         if moves:
-            print("Turn count: " + str(turn))
+            print("Debug list: xHead: " + str(xHead) + " yHead: " + str(yHead) + "Tail x: " + str(data['you']['body'][-1]['x']) + "Tail y: " + str(ySize - 1 - data['you']['body'][-1]['y']))
             print("Path is: " + str(path))
             print("Possible moves are: " + str(moves))
             print("Target: " + str(moves[0]))
             return {"move": moves[0]}
-        else:
-            print("ERROR: - PATHFIND RETURN NULL -")
-            print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
+  
+        print("ERROR: - PATHFIND RETURN NULL -")
+        print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
 
         
 
-        
+        #.
 
 def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     if 'left' in moves:
@@ -187,6 +225,7 @@ def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     #    data = cherrypy.request.json
     #    print(data)
         print("END")
+        turn = 0
         return "ok"
 
 

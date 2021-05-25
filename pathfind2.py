@@ -80,7 +80,7 @@ def astar(maze, start, end, allow_diagonal_movement = False):
           # it will not contain the destination
           warn("giving up on pathfinding too many iterations")
           print("GIVING UP - TOO LONG")
-          return return_path(current_node)       
+          return None
         
         # Get the current node
         current_node = heapq.heappop(open_list)
