@@ -35,10 +35,11 @@ def floodFill(screen, x, y, newC):
  
 # Driver Code
 
- 
 
 
-def safety(clone,x,y,num):
+
+def safety(yHead,xHead,clone,x,y,num):
+    clone[yHead][xHead] = 1
     boardData = clone
     floodFill(boardData,x,y,num)
     offLimit = sum(x.count(1) for x in boardData)

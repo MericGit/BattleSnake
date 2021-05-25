@@ -124,7 +124,7 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 40 and size > 5:
+        if data['you']['health'] > 40 and size > 6:
             #print("not too hungry so going just gonna try and survive")
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
@@ -190,6 +190,7 @@ class Battlesnake(object):
         #print("Move removals: ")
         #print(xHead)
         #print(yHead)
+        print("Precheck: " + str(moves))
         if moves:
             moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
 
@@ -213,29 +214,29 @@ class Battlesnake(object):
 def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     if 'left' in moves:
         print("Checking Left")
-        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1) or floodfill.safety(boardData,xHead -1,yHead,5):
+        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1) or floodfill.safety(yHead,xHead,boardData,xHead -1,yHead,5):
         #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
             print(colored("Illegal move: LEFT removed","red"))
             moves.remove('left')
     if 'right' in moves:
         print("Checking Right")
-        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1  or floodfill.safety(boardData,xHead + 1,yHead,5):
+        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1  or floodfill.safety(yHead,xHead,boardData,xHead + 1,yHead,5):
         #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
             print(colored("Illegal move: RIGHT removed","red"))
             moves.remove('right')
     if 'up' in moves:
         print("Checking Up")
-        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1 or floodfill.safety(boardData,xHead,yHead - 1,5):
+        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1 or floodfill.safety(yHead,xHead,boardData,xHead,yHead - 1,5):
         #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
             print(colored("Illegal move: UP removed","red"))
             moves.remove('up')
     if 'down' in moves:
         print("Checking Down")
-        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1 or floodfill.safety(boardData,xHead,yHead + 1,5):
+        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1 or floodfill.safety(yHead,xHead,boardData,xHead,yHead + 1,5):
         #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
             print(colored("Illegal move: DOWN removed","red"))
             moves.remove('down')
-    return moves
+    return
 
 
     @cherrypy.expose
