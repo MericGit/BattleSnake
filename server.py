@@ -98,21 +98,33 @@ class Battlesnake(object):
 
 
 
+
+
+        # pure witchcraft aka it's full of nonsense lmao what have I written 
         sH = calculations.path2head(yHead,xHead,tuples)
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
-            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1] - 1 > 0 and sH[0][1] < xSize - 1:
+            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
-            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1] - 1 > 0 and sH[1][1] < xSize - 1:
+            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
                 print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
                 boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
-            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1] - 1 > 0 and sH[2][1] < xSize - 1:
+            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
-
+        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20:
+            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
+                print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
+                Food.append((sH[0][0],sH[0][1]))
+            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
+                print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
+                Food.append((sH[1][0],sH[1][1]))
+            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
+                print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
+                Food.append((sH[2][0],sH[2][1]))
 
         #boardData[xSize - 1 - head['y']][head['x']] = 1
             
@@ -188,6 +200,12 @@ class Battlesnake(object):
         print("Precheck: " + str(moves))
         if moves:
             moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
+        
+        else:
+            print("ERROR: - PATHFIND RETURN WRONG SOLUTION -")
+            print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
+            moves = ['left','right','down','up']            
+            moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
 
 
         #print(moves).
@@ -197,7 +215,7 @@ class Battlesnake(object):
             print("Possible moves are: " + str(moves))
             print("Target: " + str(moves[0]))
             return {"move": moves[0]}
-  
+    
 
             
 
@@ -209,25 +227,25 @@ class Battlesnake(object):
 def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     if 'left' in moves:
         print("Checking Left")
-        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1) or floodfill.safety(yHead,xHead,boardData,xHead -1,yHead,5):
+        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1) or floodfill.safety(yHead,xHead - 1,boardData,yHead,xHead,5):
         #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
             print(colored("Illegal move: LEFT removed","red"))
             moves.remove('left')
     if 'right' in moves:
         print("Checking Right")
-        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1  or floodfill.safety(yHead,xHead,boardData,xHead + 1,yHead,5):
+        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1  or floodfill.safety(yHead,xHead + 1,boardData,yHead,xHead,5):
         #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
             print(colored("Illegal move: RIGHT removed","red"))
             moves.remove('right')
     if 'up' in moves:
         print("Checking Up")
-        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1 or floodfill.safety(yHead,xHead,boardData,xHead,yHead - 1,5):
+        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1 or floodfill.safety(yHead - 1,xHead,boardData,yHead,xHead,5):
         #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
             print(colored("Illegal move: UP removed","red"))
             moves.remove('up')
     if 'down' in moves:
         print("Checking Down")
-        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1 or floodfill.safety(yHead,xHead,boardData,xHead,yHead + 1,5):
+        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1 or floodfill.safety(yHead + 1,xHead,boardData,yHead,xHead,5):
         #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
             print(colored("Illegal move: DOWN removed","red"))
             moves.remove('down')
