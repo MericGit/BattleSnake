@@ -92,7 +92,7 @@ class Battlesnake(object):
 
 
         sH = calculations.path2head(xHead,yHead,tuples)
-        if len(sH) > 1 and closestSnake['length'] > data['you']['length']:
+        if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
@@ -100,10 +100,12 @@ class Battlesnake(object):
             print(sH[0][1])
             print(sH[1][0])
             print(sH[1][1])
-            boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
-            boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
-
-
+            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1] - 1 > 0 and sH[0][1] < xSize - 1:
+                boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
+            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1] - 1 > 0 and sH[1][1] < xSize - 1:
+                boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
+            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1] - 1 > 0 and sH[2][1] < xSize - 1:
+                boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
 
 
 #            boardData[xSize - 1 - head['y']][head['x']] = 1
@@ -183,16 +185,13 @@ class Battlesnake(object):
             print("ERROR: - PATHFIND RETURN NULL -")
             print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
             moves = ['left','right','down','up']
+            print(numpy.matrix(boardData))
 
         #print("Move removals: ")
         #print(xHead)
         #print(yHead)
         if moves:
             moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
-
-
-
-
 
 
         #print(moves).
@@ -208,26 +207,31 @@ class Battlesnake(object):
 
         
 
-        #.
+        #.def safety(clone,x,y,num): d
+
 
 def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     if 'left' in moves:
-        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1):
+        print("Checking Left")
+        if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1) or floodfill.safety(boardData,xHead -1,yHead,5):
         #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
             print(colored("Illegal move: LEFT removed","red"))
             moves.remove('left')
     if 'right' in moves:
-        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1:
+        print("Checking Right")
+        if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1  or floodfill.safety(boardData,xHead + 1,yHead,5):
         #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
             print(colored("Illegal move: RIGHT removed","red"))
             moves.remove('right')
     if 'up' in moves:
-        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1:
+        print("Checking Up")
+        if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1 or floodfill.safety(boardData,xHead,yHead - 1,5):
         #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
             print(colored("Illegal move: UP removed","red"))
             moves.remove('up')
     if 'down' in moves:
-        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1:
+        print("Checking Down")
+        if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1 or floodfill.safety(boardData,xHead,yHead + 1,5):
         #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
             print(colored("Illegal move: DOWN removed","red"))
             moves.remove('down')
@@ -238,7 +242,7 @@ def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     @cherrypy.tools.json_in()
     def end(self):
         # This function is called when a game your snake was in ends.
-        # It's purely for informational purposes, you don't have to make any decisions here.
+        # It's purely for informational purposes, you don't have to make any decisions here.d 
     #    data = cherrypy.request.json
     #    print(data)
         print("                  ")

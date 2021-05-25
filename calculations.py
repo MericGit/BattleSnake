@@ -1,4 +1,5 @@
 import collections
+import numpy
 from termcolor import colored
 def distanceSort(posX,posY,fruitArray):
     #print(colored("DISTANCE SORT DEBUG:","cyan"))
@@ -43,7 +44,7 @@ def getClosestSnake(ySize,headX,headY,snakeList):
       if x > maxNum:
          result = index
       index+=1
-   return snakeList[index]
+   return snakeList[result]
 
 
 

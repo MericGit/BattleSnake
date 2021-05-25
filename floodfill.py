@@ -1,13 +1,14 @@
+import numpy
 # Python3 program to implement
 # flood fill algorithm
  
 # Dimentions of paint screen
-M = 8
-N = 8
+M = 11
+N = 11
  
 # A recursive function to replace
 # previous color 'prevC' at '(x, y)'
-# and all surrounding pixels of (x, y)
+# and all surrounding pixels of (x, y) d
 # with new color 'newC' and
 def floodFillUtil(screen, x, y, prevC, newC):
      
@@ -33,23 +34,22 @@ def floodFill(screen, x, y, newC):
     floodFillUtil(screen, x, y, prevC, newC)
  
 # Driver Code
-screen = [[1, 1, 1, 1, 1, 1, 1, 1],
-          [1, 1, 1, 1, 1, 1, 0, 0],
-          [1, 0, 0, 1, 1, 0, 1, 1],
-          [1, 2, 2, 2, 2, 0, 1, 0],
-          [1, 1, 1, 2, 2, 0, 1, 0],
-          [1, 1, 1, 2, 2, 2, 2, 0],
-          [1, 1, 1, 1, 1, 2, 1, 1],
-          [1, 1, 1, 1, 1, 2, 2, 1]]
+
  
-x = 4
-y = 4
-newC = 3
-floodFill(screen, x, y, newC)
- 
-print ("Updated screen after call to floodFill:")
-for i in range(M):
-    for j in range(N):
-        print(screen[i][j], end = ' ')
-    print()
- 
+
+
+def safety(clone,x,y,num):
+    boardData = clone
+    floodFill(boardData,x,y,num)
+    offLimit = sum(x.count(1) for x in boardData)
+    available = sum(x.count(5) for x in boardData)
+    print("Floodfill available: " + str(available))
+    print("Floodfill offlimit: " + str(offLimit))
+    print(numpy.matrix(boardData))
+
+    if (available + sum(x.count(2) for x in boardData) / (121-offLimit)) < 0.8:
+        print("Floodfill returned Invalid: " + str(available / (121- offLimit))  + "Valid moves")
+        return True
+    print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
+    return False
+
