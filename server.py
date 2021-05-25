@@ -14,7 +14,7 @@ This is a simple Battlesnake server written in Python.
 For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
 """
 turn = 0
-
+hunt = False
 
 class Battlesnake(object):
     @cherrypy.expose
@@ -113,9 +113,11 @@ class Battlesnake(object):
 
         sH = calculations.path2head(yHead,xHead,tuples)
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
+            global hunt
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
+            hunt = False
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
@@ -126,6 +128,7 @@ class Battlesnake(object):
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
         elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20:
+            hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 Food.append((sH[0][0],sH[0][1]))
@@ -150,7 +153,10 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 40 and data['you']['length'] > 6:
+        if data['you']['health'] > 20 and hunt == True and data['you']['length'] > 4:
+            #print("not too hungry so going just gonna try and survive")
+            path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
+        elif data['you']['health'] > 40 and data['you']['length'] > 6:
             #print("not too hungry so going just gonna try and survive")
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
