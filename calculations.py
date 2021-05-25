@@ -36,8 +36,14 @@ def getClosestSnake(ySize,headX,headY,snakeList):
    for x in snakeList:
       temp = simpleDist((headY,headX),(ySize - 1 -  x['head']['y'], x['head']['x']))
       distances.append(temp)
-   output = [snakeList for _, snakeList in sorted(zip(distances, snakeList))]
-   return output[0]
+   maxNum = 0
+   result = -1
+   index = 0
+   for x in distances:
+      if x > maxNum:
+         result = index
+      index+=1
+   return snakeList[index]
 
 
 
