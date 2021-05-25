@@ -158,9 +158,9 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 20 and hunt == True and data['you']['length'] > 4:
+        if data['you']['health'] > 30 and hunt == True and data['you']['length'] > 4:
             #print("not too hungry so going just gonna try and survive")
-            path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
+            path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         elif data['you']['health'] > 40 and data['you']['length'] > 6:
             #print("not too hungry so going just gonna try and survive")
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
