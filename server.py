@@ -112,6 +112,8 @@ class Battlesnake(object):
 
 
         sH = calculations.path2head(yHead,xHead,tuples)
+        print("POSt-SORT: " + str(sH))
+
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             global hunt
             print("SH IS: ")
@@ -130,22 +132,24 @@ class Battlesnake(object):
             if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
-        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20:
+        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 3:
             hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
-                print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
+                print("Added TARGET at " + str(sH[0][0]) + str(sH[0][1]))
                 Food.append((sH[0][0],sH[0][1]))
             if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
-                print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
+                print("Added TARGET at " + str(sH[1][0]) + str(sH[1][1]))
                 Food.append((sH[1][0],sH[1][1]))
             if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
-                print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
+                print("Added TARGET at " + str(sH[2][0]) + str(sH[2][1]))
                 Food.append((sH[2][0],sH[2][1]))
             if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
-                print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
+                print("Added TARGET at " + str(sH[3][0]) + str(sH[3][1]))
                 Food.append((sH[3][0],sH[3][1]))
         #boardData[xSize - 1 - head['y']][head['x']] = 1
-            
+        print("Distance to nearest is: ")
+        print(calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])))
+
         #print("-----------\nSTATE UPDATED:")
         #print(numpy.matrix(boardData))
         #print("-----------")
@@ -227,7 +231,23 @@ class Battlesnake(object):
             print("RUNNING SURVIVAL MODE UNTIL PATHFIND RECONNECTS")
             moves = ['left','right','down','up']            
             moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
-
+        
+        if not moves: 
+            print("Survival mode check failed. Running gamble")
+            moves = ['left','right','down','up']
+            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
+                print("Removing block at " + str(sH[0][0]) + str(sH[0][1]))
+                boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 0   #First closest area
+            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
+                print("Removing block at " + str(sH[1][0]) + str(sH[1][1]))
+                boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 0   #Second closest
+            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
+                print("Removing block at " + str(sH[2][0]) + str(sH[2][1]))
+                boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 0   #Third closest area
+            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+                print("Removing block at " + str(sH[3][0]) + str(sH[3][1]))
+                boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 0   #Fourth closest area     
+            moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
 
         #print(moves).
         if moves:
