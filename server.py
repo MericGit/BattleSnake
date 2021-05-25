@@ -127,6 +127,9 @@ class Battlesnake(object):
             if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
+            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+                print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
+                boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
         elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20:
             hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
@@ -138,7 +141,9 @@ class Battlesnake(object):
             if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 Food.append((sH[2][0],sH[2][1]))
-
+            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+                print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
+                Food.append((sH[3][0],sH[3][1]))
         #boardData[xSize - 1 - head['y']][head['x']] = 1
             
         #print("-----------\nSTATE UPDATED:")
