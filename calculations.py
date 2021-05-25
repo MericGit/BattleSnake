@@ -24,7 +24,8 @@ def simpleDist(tuple1,tuple2):
    distance = abs(tuple1[0] - tuple2[1]) + abs(tuple1[1] - tuple2[1])
    return distance
 
-def path2head(headX,headY,tuples):
+def path2head(headY,headX,tuples):
+   print("Pre-Sort: " + str(tuples))
    distances = []
    for x in tuples:
       temp = simpleDist((headY,headX),x)

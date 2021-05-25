@@ -34,6 +34,8 @@ class Battlesnake(object):
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def start(self):
+        global turn
+        turn = 0
         # This function is called everytime your snake is entered into a game.
         # cherrypy.request.json contains information about the game that's about to be played.
         data = cherrypy.request.json
@@ -52,25 +54,30 @@ class Battlesnake(object):
         global turn
         print("Turn count is: " + str(turn))
         turn+=1
+
+        #TDefine and init the size and locs of some stuff
+        #--------------------------------------
         data = cherrypy.request.json
-        Food = []
+
         xSize = data['board']['height']
         ySize = data['board']['width']
-        #----------------------
-        #Board Generation Data
+
         boardData = [ [0] * xSize for _ in range(ySize)]
         snakeList = data['board']['snakes']
         xHead = data['you']['head']['x']
         yHead = ySize - 1 - data['you']['head']['y']
+        #-------------------------------------
+
         #print("xHead is")
         #print(xHead)
         #print("yHead is")
         #print(yHead)
+        Food = []
         for i in data['board']['food']:
             Food.append((xSize - 1 - i['y'],i['x']))
 
 
-
+        #Begin initializing and loading board data
         tuples = []
         for x in snakeList:
             body = x['body']
@@ -86,36 +93,33 @@ class Battlesnake(object):
                 tuples.append((ySize - 1 - head['y'],head['x'] + 1)) # right
 
 
-            closestSnake = calculations.getClosestSnake(ySize,xHead,yHead,snakeList)
+        closestSnake = calculations.getClosestSnake(ySize,xHead,yHead,snakeList)
 
 
 
 
-        sH = calculations.path2head(xHead,yHead,tuples)
+        sH = calculations.path2head(yHead,xHead,tuples)
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
-            print(sH[0][0])
-            print(sH[0][1])
-            print(sH[1][0])
-            print(sH[1][1])
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1] - 1 > 0 and sH[0][1] < xSize - 1:
+                print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
             if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1] - 1 > 0 and sH[1][1] < xSize - 1:
+                print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
                 boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
             if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1] - 1 > 0 and sH[2][1] < xSize - 1:
+                print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
 
 
-#            boardData[xSize - 1 - head['y']][head['x']] = 1
+        #boardData[xSize - 1 - head['y']][head['x']] = 1
             
         #print("-----------\nSTATE UPDATED:")
         #print(numpy.matrix(boardData))
         #print("-----------")
         #---------------------
-
-        size = len(data['you']['body'])
         #print("Size is: ")
         #print(size)
         # Choose a random direction to move in.
@@ -124,7 +128,7 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 40 and size > 6:
+        if data['you']['health'] > 40 and data['you']['length'] > 6:
             #print("not too hungry so going just gonna try and survive")
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
@@ -152,15 +156,6 @@ class Battlesnake(object):
             print(boardData)
 
         
-
-
-
-
-
-
-
-
-
         #print(colored("Path is: ","cyan"))
         #print(colored(path,'yellow'))
         #print("head: " + str(xHead) + " " + str(yHead))
@@ -249,6 +244,7 @@ def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
         print("                  ")
         print("                   ")
         print("END")
+        global turn
         turn = 0
         return "ok"
 

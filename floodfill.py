@@ -40,7 +40,9 @@ def floodFill(screen, x, y, newC):
 
 def safety(yHead,xHead,clone,x,y,num):
     clone[yHead][xHead] = 1
-    boardData = clone
+    
+    boardData = [[_el if _el != 2 else 0 for _el in _ar] for _ar in clone]
+
     floodFill(boardData,x,y,num)
     offLimit = sum(x.count(1) for x in boardData)
     available = sum(x.count(5) for x in boardData)
@@ -48,9 +50,10 @@ def safety(yHead,xHead,clone,x,y,num):
     print("Floodfill offlimit: " + str(offLimit))
     print(numpy.matrix(boardData))
 
-    if (available + sum(x.count(2) for x in boardData) / (121-offLimit)) < 0.8:
+    if (available  / (121-offLimit)) < 0.8:
         print("Floodfill returned Invalid: " + str(available / (121- offLimit))  + "Valid moves")
         return True
-    print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
-    return False
+    else:
+        print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
+        return False
 
