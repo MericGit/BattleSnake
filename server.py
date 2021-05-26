@@ -111,6 +111,8 @@ class Battlesnake(object):
         global hunt
         global aggroRange
         aggroRange = 2 + data['you']['length'] - closestSnake['length']
+        if aggroRange > 4:
+            aggroRange = 4
         sH = calculations.path2head(yHead,xHead,tuples)
         print("POSt-SORT: " + str(sH))
 
@@ -133,16 +135,16 @@ class Battlesnake(object):
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
         elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < aggroRange:
             hunt = True
-            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
+            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize and boardData[   sH[0][0]   ]      [  sH[0][1]    ] != 1:
                 print("Added TARGET at " + str(sH[0][0]) + str(sH[0][1]))
                 Food.append((sH[0][0],sH[0][1]))
-            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
+            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize and boardData[   sH[1][0]   ]      [  sH[1][1]    ] != 1:
                 print("Added TARGET at " + str(sH[1][0]) + str(sH[1][1]))
                 Food.append((sH[1][0],sH[1][1]))
-            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
+            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize and boardData[   sH[2][0]   ]      [  sH[2][1]    ] != 1:
                 print("Added TARGET at " + str(sH[2][0]) + str(sH[2][1]))
                 Food.append((sH[2][0],sH[2][1]))
-            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize and boardData[   sH[3][0]   ]      [  sH[3][1]    ] != 1:
                 print("Added TARGET at " + str(sH[3][0]) + str(sH[3][1]))
                 Food.append((sH[3][0],sH[3][1]))
         #boardData[xSize - 1 - head['y']][head['x']] = 1
