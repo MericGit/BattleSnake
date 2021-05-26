@@ -54,7 +54,7 @@ def safety(yHead,xHead,clone,y,x,num):
     if (available  / (121-offLimit)) < 0.8:
         print("Floodfill returned Invalid: " + str(available / (121- offLimit))  + "Valid moves")
         return True
-    else:
-        print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
-        return False
+
+    print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
+    return False
 

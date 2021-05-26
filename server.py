@@ -15,6 +15,7 @@ For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python
 turn = 0
 hunt = False
 aggroRange = 2
+murdercd = 0
 class Battlesnake(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -51,7 +52,7 @@ class Battlesnake(object):
     @cherrypy.tools.json_out()
     def move(self):
         global turn
-        print("Turn count is: " + str(turn))
+        print(colored("Turn count is: " + str(turn),"magenta"))
         turn+=1
 
         #TDefine and init the size and locs of some stuff
@@ -110,9 +111,10 @@ class Battlesnake(object):
         #-------------------------------------------------
         global hunt
         global aggroRange
-        aggroRange = 2 + data['you']['length'] - closestSnake['length']
-        if aggroRange > 4:
-            aggroRange = 4
+        global murdercd
+
+        if murdercd >= 2:
+            murdercd = 10
         sH = calculations.path2head(yHead,xHead,tuples)
         print("POSt-SORT: " + str(sH))
         print("CLOSEST SNAKE LENGTH: " + str(closestSnake['length']))
@@ -121,16 +123,16 @@ class Battlesnake(object):
             print(sH)
             print("ENEMY HEAD LOC: ")
             hunt = False
-            if sH[0][0] < ySize and sH[0][0] - 1 > -1 and sH[0][1]  > -1 and sH[0][1] < xSize:
+            if sH[0][0] < ySize and sH[0][0] > -1 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 1   #First closest area
-            if sH[1][0] < ySize and sH[1][0] - 1 > -1 and sH[1][1]  > -1 and sH[1][1] < xSize:
+            if sH[1][0] < ySize and sH[1][0] > -1 and sH[1][1]  > -1 and sH[1][1] < xSize:
                 print("Added block at " + str(sH[1][0]) + str(sH[1][1]))
                 boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 1   #Second closest
-            if sH[2][0] < ySize and sH[2][0] - 1 > -1 and sH[2][1]  > -1 and sH[2][1] < xSize:
+            if sH[2][0] < ySize and sH[2][0] > -1 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
-            if sH[3][0] < ySize and sH[3][0] - 1 > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
+            if sH[3][0] < ySize and sH[3][0] > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
         elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < aggroRange:
@@ -163,14 +165,15 @@ class Battlesnake(object):
 
 
         path = []
-        if data['you']['health'] > 30 and hunt is True and data['you']['length'] > 4:
-            print("Aggressive Hunting")
+        if data['you']['health'] > 30 and hunt is True and data['you']['length'] > 4 and murdercd < 2:
+            print(colored("Aggro Hunt","red"))
+            murdercd +=2
             path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
-        elif data['you']['health'] > 40 and data['you']['length'] > 6:
-            print("Survive")
+        elif data['you']['health'] > 35 and data['you']['length'] > 5:
+            print(colored("Survive","red"))
             path = pathfind2.astar(boardData, (yHead,xHead),(ySize - 1 - data['you']['body'][-1]['y'],data['you']['body'][-1]['x']))
         else:
-            print("Seek food")
+            print(colored("Seek food","yellow"))
             path = pathfind2.astar(boardData, (yHead,xHead), calculations.distanceSort(xHead,yHead,Food)[0])
         moves = []
 
@@ -277,8 +280,8 @@ class Battlesnake(object):
                 #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
                     print(colored("Illegal move: DOWN removed","red"))
                     moves.remove('down')
-
-        #print(moves).
+        murdercd -=1
+        #print(moves). 
         if moves:
             print("Debug list: xHead: " + str(xHead) + " yHead: " + str(yHead) + "Tail x: " + str(data['you']['body'][-1]['x']) + "Tail y: " + str(ySize - 1 - data['you']['body'][-1]['y']))
             print("Path is: " + str(path))
