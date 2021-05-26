@@ -115,7 +115,7 @@ class Battlesnake(object):
             aggroRange = 4
         sH = calculations.path2head(yHead,xHead,tuples)
         print("POSt-SORT: " + str(sH))
-
+        print("CLOSEST SNAKE LENGTH: " + str(closestSnake['length']))
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
             print("SH IS: ")
             print(sH)
@@ -236,16 +236,16 @@ class Battlesnake(object):
         if not moves: 
             print("Survival mode check failed. Running gamble")
             moves = ['left','right','down','up']
-            if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
+            if sH[0][0] < ySize - 1 and sH[0][0] -1 > -1 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Removing block at " + str(sH[0][0]) + str(sH[0][1]))
                 boardData[   sH[0][0]   ]      [  sH[0][1]    ] = 0   #First closest area
-            if sH[1][0] < ySize - 1 and sH[1][0] - 1 > 0 and sH[1][1]  > -1 and sH[1][1] < xSize:
+            if sH[1][0] < ySize  and sH[1][0] -1 > -1 and sH[1][1]  > -1 and sH[1][1] < xSize:
                 print("Removing block at " + str(sH[1][0]) + str(sH[1][1]))
                 boardData[   sH[1][0]   ]      [  sH[1][1]    ] = 0   #Second closest
-            if sH[2][0] < ySize - 1 and sH[2][0] - 1 > 0 and sH[2][1]  > -1 and sH[2][1] < xSize:
+            if sH[2][0] < ySize  and sH[2][0] - 1 > -1 and sH[2][1]  > -1 and sH[2][1] < xSize:
                 print("Removing block at " + str(sH[2][0]) + str(sH[2][1]))
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 0   #Third closest area
-            if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
+            if sH[3][0] < ySize  and sH[3][0] -1 > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Removing block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 0   #Fourth closest area  
             for x in snakeList:
