@@ -14,7 +14,7 @@ For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python
 """
 turn = 0
 hunt = False
-
+aggroRange = 2
 class Battlesnake(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -108,13 +108,14 @@ class Battlesnake(object):
         # TODO: FIX path2head
         #
         #-------------------------------------------------
-
-
+        global hunt
+        global aggroRange
+        aggroRange += data['you']['length'] - closestSnake['length']
         sH = calculations.path2head(yHead,xHead,tuples)
         print("POSt-SORT: " + str(sH))
 
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
-            global hunt
+
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
@@ -131,7 +132,7 @@ class Battlesnake(object):
             if sH[3][0] < ySize and sH[3][0] - 1 > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
                 boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
-        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < 2:
+        elif len(sH) > 1 and closestSnake['length'] < data['you']['length'] and data['you']['health'] > 20 and calculations.simpleDist((yHead,xHead),(ySize - 1 - closestSnake['head']['y'],closestSnake['head']['x'])) < aggroRange:
             hunt = True
             if sH[0][0] < ySize - 1 and sH[0][0] - 1 > 0 and sH[0][1]  > -1 and sH[0][1] < xSize:
                 print("Added TARGET at " + str(sH[0][0]) + str(sH[0][1]))
