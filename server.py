@@ -110,12 +110,11 @@ class Battlesnake(object):
         #-------------------------------------------------
         global hunt
         global aggroRange
-        aggroRange += data['you']['length'] - closestSnake['length']
+        aggroRange = 2 + data['you']['length'] - closestSnake['length']
         sH = calculations.path2head(yHead,xHead,tuples)
         print("POSt-SORT: " + str(sH))
 
         if len(sH) > 1 and closestSnake['length'] >= data['you']['length']:
-
             print("SH IS: ")
             print(sH)
             print("ENEMY HEAD LOC: ")
@@ -246,8 +245,36 @@ class Battlesnake(object):
                 boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 0   #Third closest area
             if sH[3][0] < ySize - 1 and sH[3][0] - 1 > 0 and sH[3][1]  > -1 and sH[3][1] < xSize:
                 print("Removing block at " + str(sH[3][0]) + str(sH[3][1]))
-                boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 0   #Fourth closest area     
-            moveCheck(xHead,yHead,xSize,ySize,boardData,moves)
+                boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 0   #Fourth closest area  
+            for x in snakeList:
+                body = x['body']
+            #    head = x['head']
+                for y in body[:-1]:
+                    boardData[ySize - 1 - y['y']][y['x']] = 1
+            if 'left' in moves:
+                print("Checking Left")
+                if (xHead - 1 < 0) or (boardData[yHead][xHead - 1] == 1):
+                #if boardData[yHead][xHead - 1] == 1 or xHead - 1 < 0:
+                    print(colored("Illegal move: LEFT removed","red"))
+                    moves.remove('left')
+            if 'right' in moves:
+                print("Checking Right")
+                if xHead + 1 > (xSize - 1) or boardData[yHead][xHead + 1] == 1:
+                #if boardData[yHead][xHead + 1] == 1 or xHead + 1 > xSize:
+                    print(colored("Illegal move: RIGHT removed","red"))
+                    moves.remove('right')
+            if 'up' in moves:
+                print("Checking Up")
+                if yHead - 1 < 0 or boardData[yHead - 1][xHead] == 1:
+                #if boardData[yHead - 1][xHead] == 1 or yHead - 1 < 0:
+                    print(colored("Illegal move: UP removed","red"))
+                    moves.remove('up')
+            if 'down' in moves:
+                print("Checking Down")
+                if yHead + 1 > (ySize - 1) or boardData[yHead + 1][xHead] == 1:
+                #if boardData[yHead + 1][xHead] == 1 or yHead + 1 > ySize:
+                    print(colored("Illegal move: DOWN removed","red"))
+                    moves.remove('down')
 
         #print(moves).
         if moves:
