@@ -44,9 +44,9 @@ def safety(xs,ys,yHead,xHead,clone,y,x,num):
     #print(numpy.matrix(boardData))
 
     if (available  / (121-offLimit)) < 0.8:
-        print("Floodfill returned Invalid: " + str(available / (121- offLimit))  + "Valid moves")
+        print("Floodfill returned Invalid: " + str(available / ((xs*ys)- offLimit))  + "Valid moves")
         return True
 
-    print("Floodfill returned valid: " + str(available / (121- offLimit))  + "Valid moves")
+    print("Floodfill returned valid: " + str(available / ((xs*ys)- offLimit))  + "Valid moves")
     return False
 
