@@ -22,9 +22,9 @@ def floodFillUtil(xs,ys,screen, x, y, prevC, newC):
     floodFillUtil(screen, x, y - 1, prevC, newC)
  
 
-def floodFill(screen, x, y, newC):
+def floodFill(xs,ys,screen, x, y, newC):
     prevC = screen[x][y]
-    floodFillUtil(screen, x, y, prevC, newC)
+    floodFillUtil(xs,ys,screen, x, y, prevC, newC)
  
 
 
