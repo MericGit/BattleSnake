@@ -1,24 +1,18 @@
 import numpy
-# Python3 program to implement
-# flood fill algorithm
+
+
  
-# Dimentions of paint screen
-M = 11
-N = 11
- 
-# A recursive function to replace
-# previous color 'prevC' at '(x, y)'
-# and all surrounding pixels of (x, y) d
-# with new color 'newC' and
-def floodFillUtil(screen, x, y, prevC, newC):
-     
-    # Base cases
+
+def floodFillUtil(xs,ys,screen, x, y, prevC, newC):
+    M= xs
+    N = ys
+    # Base 
     if (x < 0 or x >= M or y < 0 or
         y >= N or screen[x][y] != prevC or
         screen[x][y] == newC):
         return
  
-    # Replace the color at (x, y)
+
     screen[x][y] = newC
  
     # Recur for north, east, south and west
@@ -27,13 +21,11 @@ def floodFillUtil(screen, x, y, prevC, newC):
     floodFillUtil(screen, x, y + 1, prevC, newC)
     floodFillUtil(screen, x, y - 1, prevC, newC)
  
-# It mainly finds the previous color on (x, y) and
-# calls floodFillUtil()
+
 def floodFill(screen, x, y, newC):
     prevC = screen[x][y]
     floodFillUtil(screen, x, y, prevC, newC)
  
-# Driver Code
 
 
 
