@@ -53,20 +53,16 @@ def astar(maze, start, end, allow_diagonal_movement = False):
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
     end_node.g = end_node.h = end_node.f = 0
-
     # Initialize both open and closed list
     open_list = []
     closed_list = []
-
     # Heapify the open_list and Add the start node
     heapq.heapify(open_list) 
     heapq.heappush(open_list, start_node)
 
-    # Adding a stop condition
     outer_iterations = 0
     max_iterations = (len(maze[0]) * len(maze) // 2)
 
-    # what squares do we search
     adjacent_squares = ((0, -1), (0, 1), (-1, 0), (1, 0),)
     if allow_diagonal_movement:
         adjacent_squares = ((0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1),)
