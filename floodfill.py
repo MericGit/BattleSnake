@@ -16,10 +16,10 @@ def floodFillUtil(xs,ys,screen, x, y, prevC, newC):
     screen[x][y] = newC
  
     # Recur for north, east, south and west
-    floodFillUtil(screen, x + 1, y, prevC, newC)
-    floodFillUtil(screen, x - 1, y, prevC, newC)
-    floodFillUtil(screen, x, y + 1, prevC, newC)
-    floodFillUtil(screen, x, y - 1, prevC, newC)
+    floodFillUtil(xs,ys,screen, x + 1, y, prevC, newC)
+    floodFillUtil(xs,ys,screen, x - 1, y, prevC, newC)
+    floodFillUtil(xs,ys,screen, x, y + 1, prevC, newC)
+    floodFillUtil(xs,ys,screen, x, y - 1, prevC, newC)
  
 
 def floodFill(xs,ys,screen, x, y, newC):
