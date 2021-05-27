@@ -25,14 +25,14 @@ def simpleDist(tuple1,tuple2):
    return distance
 
 def path2head(headY,headX,tuples):
-   print("Pre-Sort: " + str(tuples))
+   #print("Pre-Sort: " + str(tuples))
    distances = []
    for x in tuples:
       temp = simpleDist((headY,headX),x)
       distances.append(temp)
-   print("YOUR HEAD: " + str(headY) + " " + str(headX))
-   print("DISTANCES ARRAY: " + str(distances))
-   print("SNAKETUPLE ARRAY: " + str(tuples))
+   #print("YOUR HEAD: " + str(headY) + " " + str(headX))
+   #print("DISTANCES ARRAY: " + str(distances))
+   #print("SNAKETUPLE ARRAY: " + str(tuples))
    output = [tuples for _, tuples in sorted(zip(distances, tuples))]
    return output
 
@@ -48,8 +48,8 @@ def getClosestSnake(ySize,headX,headY,snakeList):
       if x > maxNum:
          result = index
       index+=1
-   print("CLOSEST SNAKE: ")
-   print(snakeList[result])
+#   print("CLOSEST SNAKE: ")
+#   print(snakeList[result])
    return snakeList[result]
 
 
