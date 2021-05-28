@@ -10,10 +10,10 @@ The snake also utilizes a simple search depth of 1 move to attempt to predict wh
 
 In cases where moves are all invalid, the snake follows a search heirarchy to determine the most optimal move. Each time a move check fails it loosens the restrictions. (I.E. First pass check --> must be valid --> Second pass --> Ignores floodfill req --> Third Pass ---> Ignores head on collision req --> Final pass --> Random Move)
 
-![image](https://user-images.githubusercontent.com/41242144/120031860-ff215c80-bfbe-11eb-9de6-8cc1d5f4365b.png)
+![image](https://user-images.githubusercontent.com/41242144/120031860-ff215c80-bfbe-11eb-9de6-8cc1d5f4365b.png)<br/>
 The snake has seen mild success, and is currently somewhere in the middle of the leaderboards. 
 
 
 
-Designed for Chicago-CSTA Battlesnake Competition
+### Designed for Chicago-CSTA Battlesnake Competition
 
