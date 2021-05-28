@@ -130,6 +130,9 @@ class Battlesnake(object):
                 if sH[2][0] < ySize and sH[2][0] > -1 and sH[2][1]  > -1 and sH[2][1] < xSize:
                     print("Added block at " + str(sH[2][0]) + str(sH[2][1]))
                     boardData[   sH[2][0]   ]      [  sH[2][1]    ] = 1   #Third closest area
+                if sH[3][0] < ySize and sH[3][0] > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
+                    print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
+                    boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area
         #            if sH[3][0] < ySize and sH[3][0] > -1 and sH[3][1]  > -1 and sH[3][1] < xSize:
         #                print("Added block at " + str(sH[3][0]) + str(sH[3][1]))
         #                boardData[   sH[3][0]   ]      [  sH[3][1]    ] = 1   #Fourth closest area                
