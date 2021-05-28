@@ -9,8 +9,8 @@ import pathfind2
 import floodfill
 
 """
-This is a simple Battlesnake server written in Python.
-For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
+Simple code for Danger Noodle. Very messy and unorganized. Originally created from the Battlesnake starter code
+
 """
 turn = 0
 hunt = False
@@ -20,9 +20,7 @@ class Battlesnake(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def index(self):
-        # This function is called when you register your Battlesnake on play.battlesnake.com
-        # It controls your Battlesnake appearance and author permissions.
-        # TIP: If you open your Battlesnake URL in browser you should see this data
+
         return {
             "apiversion": "1",
             "author": "Lawrence Zhang",
@@ -36,8 +34,7 @@ class Battlesnake(object):
     def start(self):
         global turn
         turn = 0
-        # This function is called everytime your snake is entered into a game.
-        # cherrypy.request.json contains information about the game that's about to be played.
+
         data = cherrypy.request.json
 
         xSize = data['board']['height']
@@ -363,8 +360,7 @@ def moveCheck(xHead,yHead,xSize,ySize,boardData,moves):
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def end(self):
-        # This function is called when a game your snake was in ends.
-        # It's purely for informational purposes, you don't have to make any decisions here.d 
+
     #    data = cherrypy.request.json
     #    print(data)
         print("                  ")
