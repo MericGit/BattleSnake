@@ -6,7 +6,7 @@ The AI mainly uses A* To both stall, and find food as quick as possible. By mixi
 
 Additionally the snake utilizes Flood Fill in order to attempt to always choose a more optimal solution that won't trap itself. Moving into a location which allows it to access fewer than 65% of the available board marks it as invalid. 
 
-The snake also utilizes a simple search depth of 1 move to attempt to predict where the enemy snakes may move. This way it can attempt to avoid, or make head on collisions to kill and avoid snakes.
+The snake also utilizes a simple search depth of 1 move to attempt to predict where the enemy snakes may move. This way it can attempt to avoid, or make head on collisions to kill and avoid snakes. To be clear there is no tree searching happening here, it only looks ahead 1 move so it will still often die from being unable to look ahead far enough. Even a search depth of 2 moves would drastically imrpvoe performance however I have not implemented that.
 
 In cases where moves are all invalid, the snake follows a search heirarchy to determine the most optimal move. Each time a move check fails it loosens the restrictions. (I.E. First pass check --> must be valid --> Second pass --> Ignores floodfill req --> Third Pass ---> Ignores head on collision req --> Final pass --> Random Move)
 
